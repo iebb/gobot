@@ -1,0 +1,7 @@
+.idea/
+avatars/
+*.sh
+*.db
+*.pyx
+*.pyc
+config.py
