@@ -5,7 +5,7 @@ import time
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
-from helpers import center_text, add_corners
+from utils.helpers import center_text, add_corners
 from utils.consts import convertTimeStamp
 from utils.wmpvp import get_csgo_history
 
@@ -25,10 +25,13 @@ def create_signature(user_info, results):
     #     'RGBA', ((img_width + padding) * img_cnt + padding, 128),
     #     color=(255, 255, 255, 0)
     # )
-    img = Image.open("../data/img_1.png")
+    img = Image.open("./data/img_1.png")
 
     d = ImageDraw.Draw(img)
+    d_aa_off = ImageDraw.Draw(img)
+    d_aa_off.fontmode = "1"
     normal_font = ImageFont.truetype('fonts/Poppins-Medium.ttf', 11)
+    pixel_font = ImageFont.truetype('fonts/LcdSolid-VPzB.ttf', 10)
     monospace_font = ImageFont.truetype('fonts/AnonymousPro-Bold.ttf', 11)
     unicode_font = ImageFont.truetype('fonts/NotoSansCJKjp-Regular.otf', 15)
 
@@ -79,7 +82,7 @@ def create_signature(user_info, results):
         block_end_x = block_start_x + img_total_width
         text_x_dxim = block_start_x + dxim
         text_start_self = text_x_dxim
-        text_start_enemy = text_x_dxim + 20
+        text_start_enemy = text_x_dxim + 22
 
         im = Image.open(result['map']).resize((img_real_width, img_real_width))
         img.paste(im, (text_x_dxim, img_start_y), im)
@@ -89,9 +92,9 @@ def create_signature(user_info, results):
             text_time = convertTimeStamp(result["timestamp"], "%m-%d")
 
         center_text(
-            d, block_start_x, block_end_x, text_date_y,
+            d_aa_off, block_start_x, block_end_x, text_date_y,
             text_time,
-            font=monospace_font, fill="white"
+            font=pixel_font, fill="white"
         )
 
         # [40]
@@ -120,24 +123,24 @@ def create_signature(user_info, results):
             indicator_rating_color = '#00ff00'
 
         center_text(
-            d, block_start_x, block_end_x, text_rating_y,
+            d_aa_off, block_start_x, block_end_x, text_rating_y,
             text_rating,
-            font=monospace_font, fill=indicator_rating_color
+            font=pixel_font, fill=indicator_rating_color
         )
         if result['elo'] > 0:
             center_text(
-                d, block_start_x, block_end_x, text_elo_y,
+                d_aa_off, block_start_x, block_end_x, text_elo_y,
                 text_elo,
-                font=monospace_font, fill=elo_indicator_color
+                font=pixel_font, fill=elo_indicator_color
             )
         # scoreboard
-        d.text(
+        d_aa_off.text(
             (text_start_self, text_y), "%02d" % score_self,
-            font=monospace_font, fill=indicator_color
+            font=pixel_font, fill=indicator_color
         )
-        d.text(
+        d_aa_off.text(
             (text_start_enemy, text_y), "%02d" % score_enemy,
-            font=monospace_font, fill=(255, 255, 255)
+            font=pixel_font, fill=(255, 255, 255)
         )
 
     # img.save('pil_text_font.png')
