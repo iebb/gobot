@@ -28,10 +28,9 @@ def create_signature(user_info, results):
     img = Image.open("./data/img_1.png")
 
     d = ImageDraw.Draw(img)
-    d_aa_off = ImageDraw.Draw(img)
-    d_aa_off.fontmode = "1"
+    d = ImageDraw.Draw(img)
+    # d.fontmode = "1"
     normal_font = ImageFont.truetype('fonts/Poppins-Medium.ttf', 11)
-    pixel_font = ImageFont.truetype('fonts/LcdSolid-VPzB.ttf', 10)
     monospace_font = ImageFont.truetype('fonts/AnonymousPro-Bold.ttf', 11)
     unicode_font = ImageFont.truetype('fonts/NotoSansCJKjp-Regular.otf', 15)
 
@@ -92,9 +91,9 @@ def create_signature(user_info, results):
             text_time = convertTimeStamp(result["timestamp"], "%m-%d")
 
         center_text(
-            d_aa_off, block_start_x, block_end_x, text_date_y,
+            d, block_start_x, block_end_x, text_date_y,
             text_time,
-            font=pixel_font, fill="white"
+            font=monospace_font, fill="white"
         )
 
         # [40]
@@ -123,24 +122,24 @@ def create_signature(user_info, results):
             indicator_rating_color = '#00ff00'
 
         center_text(
-            d_aa_off, block_start_x, block_end_x, text_rating_y,
+            d, block_start_x, block_end_x, text_rating_y,
             text_rating,
-            font=pixel_font, fill=indicator_rating_color
+            font=monospace_font, fill=indicator_rating_color
         )
         if result['elo'] > 0:
             center_text(
-                d_aa_off, block_start_x, block_end_x, text_elo_y,
+                d, block_start_x, block_end_x, text_elo_y,
                 text_elo,
-                font=pixel_font, fill=elo_indicator_color
+                font=monospace_font, fill=elo_indicator_color
             )
         # scoreboard
-        d_aa_off.text(
+        d.text(
             (text_start_self, text_y), "%02d" % score_self,
-            font=pixel_font, fill=indicator_color
+            font=monospace_font, fill=indicator_color
         )
-        d_aa_off.text(
+        d.text(
             (text_start_enemy, text_y), "%02d" % score_enemy,
-            font=pixel_font, fill=(255, 255, 255)
+            font=monospace_font, fill=(255, 255, 255)
         )
 
     # img.save('pil_text_font.png')
