@@ -14,7 +14,7 @@ def get_sender_account(sender_id, tag, index=0) -> str:
         idx = int(index)
     except:
         idx = 0
-    if idx > 0:
+    if idx == 0:
         cur.execute(
             "SELECT * FROM accounts WHERE qq = ? ORDER BY is_last_used DESC, steamid32 LIMIT 1", (sender_id, ))
     else:
