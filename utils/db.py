@@ -33,7 +33,7 @@ def set_main_account(sender_id, index=0):
         idx = int(index) - 1
     except:
         idx = 0
-    cur.execute("SELECT * FROM accounts WHERE qq = ? ORDER BY steamid32 LIMIT %d, 1" % idx, (sender_id, ))
+    cur.execute("SELECT * FROM accounts WHERE qq = ? ORDER BY steamid32 LIMIT %d, 1", (sender_id, ))
     row = cur.fetchone()
     if not row:
         return None
