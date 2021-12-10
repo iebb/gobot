@@ -69,7 +69,7 @@ async def perfectWorldSignature(app, message, reply, data_source=0, index=0):
             'data/steamchina_102.ico', 'data/wmpvp.ico'
         ][data_source],
         'name': wanmei_data["user-info"]['name'],
-        'code': wanmei_data["basic-data"]['friendCode'],
+        'code': wanmei_data["basic-data"]['friendCode'] if wanmei_data["basic-data"]['friendCode'] else '-',
         'avatar': basename,
     }
 
