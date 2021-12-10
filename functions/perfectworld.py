@@ -12,9 +12,9 @@ from utils.wmpvp import get_csgo_history
 async def perfectWorldMatches(app, message, reply, data_source=0, index=0):
     account = get_sender_account(message.sender.id, 'steamid64', index)
     if account == "ACCOUNT_NOT_EXIST":
-        return [noPlatformMessage]
-    if not account:
         return [bindMessage]
+    if not account:
+        return [noPlatformMessage]
 
     wanmei_data = get_csgo_history(account, 8, data_source)
 
@@ -54,9 +54,9 @@ async def perfectWorldMatches(app, message, reply, data_source=0, index=0):
 async def perfectWorldSignature(app, message, reply, data_source=0, index=0):
     account = get_sender_account(message.sender.id, 'steamid64', index)
     if account == "ACCOUNT_NOT_EXIST":
-        return [noPlatformMessage]
-    if not account:
         return [bindMessage]
+    if not account:
+        return [noPlatformMessage]
 
     wanmei_data = get_csgo_history(account, 10, data_source)
     basename = "avatars/" + os.path.basename(wanmei_data["user-info"]['avatar'])

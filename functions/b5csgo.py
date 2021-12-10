@@ -9,9 +9,9 @@ async def B5Matches(app, message, reply, index=0):
     account = get_sender_account(message.sender.id, 'b5_id', index)
     print(account)
     if account == "ACCOUNT_NOT_EXIST":
-        return [noPlatformMessage]
-    if not account:
         return [bindMessage]
+    if not account:
+        return [noPlatformMessage]
 
     b5 = get_b5csgo_account(account)
     response = [

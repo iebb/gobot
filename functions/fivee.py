@@ -13,9 +13,9 @@ async def fiveEMatches(app, message, reply, index=0):
 
     account = get_sender_account(message.sender.id, '5e_id', index)
     if account == "ACCOUNT_NOT_EXIST":
-        return [noPlatformMessage]
-    if not account:
         return [bindMessage]
+    if not account:
+        return [noPlatformMessage]
 
     five_e_data = get_five_e_data(account)
     response = [
@@ -74,9 +74,9 @@ async def fiveESignature(app, message, reply, index=0):
 
     account = get_sender_account(message.sender.id, '5e_id', index)
     if account == "ACCOUNT_NOT_EXIST":
-        return [noPlatformMessage]
-    if not account:
         return [bindMessage]
+    if not account:
+        return [noPlatformMessage]
 
     five_e_data = get_five_e_data(account)
     avatar_link = five_e_data["user"]["avatar_url"]
