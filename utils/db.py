@@ -16,7 +16,7 @@ def get_sender_account(sender_id, tag, index=0) -> str:
         idx = 0
     if idx > 0:
         cur.execute(
-            "SELECT * FROM accounts WHERE qq = ? ORDER BY is_last_used DESC, steamid32 LIMIT 1" % idx, (sender_id, ))
+            "SELECT * FROM accounts WHERE qq = ? ORDER BY is_last_used DESC, steamid32 LIMIT 1", (sender_id, ))
     else:
         cur.execute(
             "SELECT * FROM accounts WHERE qq = ? ORDER BY steamid32 LIMIT %d, 1" % idx, (sender_id, ))
@@ -33,7 +33,7 @@ def set_main_account(sender_id, index=0):
         idx = int(index) - 1
     except:
         idx = 0
-    cur.execute("SELECT * FROM accounts WHERE qq = ? ORDER BY steamid32 LIMIT %d, 1", (sender_id, ))
+    cur.execute("SELECT * FROM accounts WHERE qq = ? ORDER BY steamid32 LIMIT %d, 1" % idx, (sender_id, ))
     row = cur.fetchone()
     if not row:
         return None
