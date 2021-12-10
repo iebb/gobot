@@ -4,62 +4,61 @@ import requests
 from graia.application.message.elements.internal import Plain, Image
 
 from utils.imagen import create_signature
-from utils.consts import bindMessage, convertTimeStamp
-from utils.db import get_db_cur
+from utils.consts import bindMessage, convertTimeStamp, noPlatformMessage
+from utils.db import get_db_cur, get_sender_account
 from utils.wmpvp import get_csgo_history
 
 
-async def perfectWorldMatches(app, message, reply, data_source=0):
+async def perfectWorldMatches(app, message, reply, data_source=0, index=0):
+    account = get_sender_account(message.sender.id, 'steamid64', index)
+    if account == "ACCOUNT_NOT_EXIST":
+        return [noPlatformMessage]
+    if not account:
+        return [bindMessage]
 
-    db, cur = get_db_cur()
-    cur.execute("SELECT steamid64 FROM accounts WHERE qq = ?", (message.sender.id, ))
-    row = cur.fetchone()
-    if row:
-        wanmei_data = get_csgo_history(row[0], 8, data_source)
+    wanmei_data = get_csgo_history(account, 8, data_source)
 
-        response = [
-            Plain("Steam 用户名：" + wanmei_data["user-info"]["name"]),
-            Plain(f"\n国服：\n"
-                  f"{wanmei_data['basic-data']['totalMatch']} 场 / "
-                  f"Rtg {wanmei_data['basic-data']['rating']} / "
-                  f"KD {wanmei_data['basic-data']['kd']} / "
-                  f"MVP {wanmei_data['basic-data']['mvpCount']}"),
-        ]
+    response = [
+        Plain("Steam 用户名：" + wanmei_data["user-info"]["name"]),
+        Plain(f"\n国服：\n"
+              f"{wanmei_data['basic-data']['totalMatch']} 场 / "
+              f"Rtg {wanmei_data['basic-data']['rating']} / "
+              f"KD {wanmei_data['basic-data']['kd']} / "
+              f"MVP {wanmei_data['basic-data']['mvpCount']}"),
+    ]
 
-        response += [Plain("\n-------------------")]
+    response += [Plain("\n-------------------")]
 
-        for row in wanmei_data["match"]:
-            team1 = ("[%d]" if row["team"] == 1 else "%d") % row["score1"]
-            team2 = ("[%d]" if row["team"] == 2 else "%d") % row["score2"]
-            win = (
-                row["team"] == 1 and row["score1"] > row["score2"]
-            ) or (
-                row["team"] == 2 and row["score1"] < row["score2"]
-            )
-            if row["score1"] == row["score2"]:
-                symbol = '💛'
-            elif win:
-                symbol = '💚'
-            else:
-                symbol = '💔'
-            ty = ' [' + row['mode'].replace("竞技", "") + ']'
-            msg = f"\n{symbol} {convertTimeStamp(row['timeStamp'])} {row['mapName']}{ty}\n" \
-                  f"{team1} - {team2} / {row['kill']}-{row['assist']}-{row['death']} / Rating {row['rating']}"
-            response += [Plain(msg)]
-    else:
-        response = [bindMessage]
+    for row in wanmei_data["match"]:
+        team1 = ("[%d]" if row["team"] == 1 else "%d") % row["score1"]
+        team2 = ("[%d]" if row["team"] == 2 else "%d") % row["score2"]
+        win = (
+            row["team"] == 1 and row["score1"] > row["score2"]
+        ) or (
+            row["team"] == 2 and row["score1"] < row["score2"]
+        )
+        if row["score1"] == row["score2"]:
+            symbol = '💛'
+        elif win:
+            symbol = '💚'
+        else:
+            symbol = '💔'
+        ty = ' [' + row['mode'].replace("竞技", "") + ']'
+        msg = f"\n{symbol} {convertTimeStamp(row['timeStamp'])} {row['mapName']}{ty}\n" \
+              f"{team1} - {team2} / {row['kill']}-{row['assist']}-{row['death']} / Rating {row['rating']}"
+        response += [Plain(msg)]
 
     return response
 
 
-async def perfectWorldSignature(app, message, reply, data_source=0):
-    db, cur = get_db_cur()
-    cur.execute("SELECT steamid64 FROM accounts WHERE qq = ?", (message.sender.id, ))
-    row = cur.fetchone()
-    if not row:
+async def perfectWorldSignature(app, message, reply, data_source=0, index=0):
+    account = get_sender_account(message.sender.id, 'steamid64', index)
+    if account == "ACCOUNT_NOT_EXIST":
+        return [noPlatformMessage]
+    if not account:
         return [bindMessage]
 
-    wanmei_data = get_csgo_history(row[0], 10, data_source)
+    wanmei_data = get_csgo_history(account, 10, data_source)
     basename = "avatars/" + os.path.basename(wanmei_data["user-info"]['avatar'])
     if not os.path.isfile(basename):
         open(basename, "wb+").write(requests.get(wanmei_data["user-info"]['avatar']).content)

@@ -5,7 +5,7 @@ from graia.application import GraiaMiraiApplication
 from graia.application import GroupMessage, TempMessage, FriendMessage
 
 from functions.b5csgo import B5Matches
-from functions.bindAccount import bindAccount
+from functions.bindAccount import bindAccount, listAccounts, setMainAccount
 from functions.fivee import fiveEMatches, fiveESignature
 from functions.hltv import hltvMatches
 from functions.perfectworld import perfectWorldMatches, perfectWorldSignature
@@ -17,27 +17,29 @@ message_regex = [
      r'(?P<steamid32>\d{,10}))\s*$', bindAccount, {
         "need_binding": True
     }),
-    (r'^#国服', perfectWorldMatches, {
+    (r'^#账号列表', listAccounts, {}),
+    (r'^#主账号(#(?P<index>\d+))?', setMainAccount, {}),
+    (r'^#国服(#(?P<index>\d+))?', perfectWorldMatches, {
         'data_source': 1,
     }),
-    (r'^#国际服', perfectWorldMatches, {
+    (r'^#国际服(#(?P<index>\d+))?', perfectWorldMatches, {
         'data_source': 2,
     }),
-    (r'^#完美', perfectWorldMatches, {
+    (r'^#完美(#(?P<index>\d+))?', perfectWorldMatches, {
         'data_source': 3,
     }),
-    (r'^%国服', perfectWorldSignature, {
+    (r'^%国服(#(?P<index>\d+))?', perfectWorldSignature, {
         'data_source': 1,
     }),
-    (r'^%国际服', perfectWorldSignature, {
+    (r'^%国际服(#(?P<index>\d+))?', perfectWorldSignature, {
         'data_source': 2,
     }),
-    (r'^%完美', perfectWorldSignature, {
+    (r'^%完美(#(?P<index>\d+))?', perfectWorldSignature, {
         'data_source': 3,
     }),
-    (r'^#5E', fiveEMatches, {}),
-    (r'^%5E', fiveESignature, {}),
-    (r'^#B5', B5Matches, {}),
+    (r'^#5E(#(?P<index>\d+))?', fiveEMatches, {}),
+    (r'^%5E(#(?P<index>\d+))?', fiveESignature, {}),
+    (r'^#B5(#(?P<index>\d+))?', B5Matches, {}),
 ]
 
 
