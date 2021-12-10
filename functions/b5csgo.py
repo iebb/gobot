@@ -7,6 +7,7 @@ from utils.db import get_db_cur, get_sender_account
 async def B5Matches(app, message, reply, index=0):
 
     account = get_sender_account(message.sender.id, 'b5_id', index)
+    print(account)
     if account == "ACCOUNT_NOT_EXIST":
         return [noPlatformMessage]
     if not account:
@@ -19,6 +20,7 @@ async def B5Matches(app, message, reply, index=0):
     ]
 
     for row in b5["matches"][:5]:
+        print(row)
         result = row["win"]
         if result == 0:
             symbol = '💔'

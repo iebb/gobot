@@ -21,7 +21,6 @@ def get_sender_account(sender_id, tag, index=0) -> str:
         cur.execute(
             "SELECT * FROM accounts WHERE qq = ? ORDER BY steamid32 LIMIT %d, 1" % idx, (sender_id, ))
     row = cur.fetchone()
-    print(dict(row), tag)
     if not row:
         return "ACCOUNT_NOT_EXIST"
     if tag in dict(row):
